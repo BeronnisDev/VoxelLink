@@ -126,6 +126,16 @@ dependencies {
     compileOnly "cc.tweaked:cc-tweaked-${minecraft_version}-forge-api:${cct_version}"
     localRuntime "cc.tweaked:cc-tweaked-${minecraft_version}-forge:${cct_version}"
 
+    // WebSocket server for editor bridge (bundled via jarJar for release)
+    jarJar(implementation("org.java-websocket:Java-WebSocket:${websocket_version}")) {
+        version {
+            strictly "[${websocket_version},)"
+            prefer "${websocket_version}"
+        }
+    }
+    // Required for gradlew runClient on MC 1.21.8 and below — library is not a mod
+    clientAdditionalRuntimeClasspath "org.java-websocket:Java-WebSocket:${websocket_version}"
+
     // Example optional mod dependency with JEI
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
     // compileOnly "mezz.jei:jei-${mc_version}-common-api:${jei_version}"

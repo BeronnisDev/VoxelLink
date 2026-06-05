@@ -46,19 +46,19 @@ Build a Minecraft 1.21.1 NeoForge mod that bridges external editors with CC: Twe
 ### Task 2.1: Add WebSocket Dependency
 - **Goal**: Project can use a WebSocket library
 - **Steps**:
-  - [ ] Add `org.java-websocket:Java-WebSocket` or `io.javalin:javalin` dependency to `build.gradle`
-  - [ ] Verify dependency resolves in IDE
-- **Test**: Import WebSocket class in a test file, verify compilation — [ ]
-- **Acceptance**: Build succeeds with new dependency — [ ]
+  - [x] Add `org.java-websocket:Java-WebSocket` dependency to `build.gradle` (bundled via jarJar)
+  - [x] Verify dependency resolves in IDE
+- **Test**: Import WebSocket class in a test file, verify compilation — [x]
+- **Acceptance**: Build succeeds with new dependency — [x]
 
 ### Task 2.2: Create Socket Server Skeleton
 - **Goal**: A basic WebSocket server starts on the client
 - **Steps**:
-  - [ ] Create `EditorSocketServer` class
-  - [ ] Implement server startup in `CCEditorBridgeClient` client setup
-  - [ ] Bind to `localhost:<configPort>`
-  - [ ] Add basic connection handler (log connections/disconnections)
-  - [ ] Add graceful shutdown on client disconnect
+  - [x] Create `EditorSocketServer` class
+  - [x] Implement server startup in `CCEditorBridgeClient` client setup
+  - [x] Bind to `localhost:<configPort>`
+  - [x] Add basic connection handler (log connections/disconnections)
+  - [x] Add graceful shutdown on client disconnect
 - **Test**: Launch client, connect via `websocat ws://localhost:8765`, verify connection opens/closes — [ ]
 - **Acceptance**: Server accepts connections, logs events, shuts down cleanly — [ ]
 
