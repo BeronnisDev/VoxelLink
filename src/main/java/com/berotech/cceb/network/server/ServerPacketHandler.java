@@ -6,6 +6,9 @@ import com.berotech.cceb.CCEditorBridge;
 import com.berotech.cceb.cc.CCComputerLookup;
 import com.berotech.cceb.cc.CCFilesystemAccess;
 import com.berotech.cceb.cc.CCPaths;
+import com.berotech.cceb.network.payload.ComputerListEntry;
+import com.berotech.cceb.network.payload.ComputerListRequestPayload;
+import com.berotech.cceb.network.payload.ComputerListResponsePayload;
 import com.berotech.cceb.network.payload.ErrorResponsePayload;
 import com.berotech.cceb.network.payload.FileDeleteRequestPayload;
 import com.berotech.cceb.network.payload.FileDeleteResponsePayload;
@@ -37,6 +40,24 @@ public final class ServerPacketHandler {
 
     public static void handleFileDelete(FileDeleteRequestPayload payload, IPayloadContext context) {
         context.enqueueWork(() -> handleFileDeleteWork(payload, context));
+    }
+
+    public static void handleComputerList(ComputerListRequestPayload payload, IPayloadContext context) {
+        context.enqueueWork(() -> handleComputerListWork(payload, context));
+    }
+
+    private static void handleComputerListWork(ComputerListRequestPayload payload, IPayloadContext context) {
+        if (!(context.player() instanceof ServerPlayer player)) {
+            context.reply(new ComputerListResponsePayload(payload.requestId(), List.of(), "Computer list requires a player"));
+            return;
+        }
+
+        CCEditorBridge.LOGGER.info("Computer list request {}", payload.requestId());
+
+        List<ComputerListEntry> computers = CCComputerLookup.listAccessible(player.getServer(), player).stream()
+                .map(computer -> new ComputerListEntry(computer.id(), computer.label() == null ? "" : computer.label()))
+                .toList();
+        context.reply(new ComputerListResponsePayload(payload.requestId(), computers, ""));
     }
 
     private static void handleFileListWork(FileListRequestPayload payload, IPayloadContext context) {

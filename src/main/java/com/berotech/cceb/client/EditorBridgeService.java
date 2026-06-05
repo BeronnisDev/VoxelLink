@@ -102,6 +102,25 @@ public final class EditorBridgeService {
         );
     }
 
+    public static void forwardOpenRequest(String computerId, String path) {
+        if (server == null) {
+            CCEditorBridge.LOGGER.debug(
+                    "Ignoring open editor request for computer '{}' path '{}'; bridge not running",
+                    computerId,
+                    path
+            );
+            return;
+        }
+
+        String json = EditorMessageCodec.encode(EditorMessage.openFile(computerId, path));
+        server.broadcastToAuthenticated(json);
+        CCEditorBridge.LOGGER.info(
+                "Forwarded open_file request for computer '{}' path '{}' to editor clients",
+                computerId,
+                path
+        );
+    }
+
     private static void registerShutdownHook() {
         if (shutdownHookRegistered) {
             return;

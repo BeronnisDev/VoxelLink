@@ -110,6 +110,24 @@ Use `/cceditor id` in-game (while looking at a computer) to see available ids.
 - Label lookup searches running computers and loaded chunks near online players
 - For offline/unloaded computers, use a `pos:` id
 
+## Computer discovery
+
+List computers the connected player can access (loaded/running within view distance):
+
+**Editor → Server**
+
+```json
+{"type":"computer_list"}
+```
+
+**Server → Editor (success)**
+
+```json
+{"type":"computer_list_ok","computers":[{"id":"pos:minecraft:overworld:10:64:-5","label":"my-controller"}]}
+```
+
+Each entry uses a unique `pos:` id. `label` is included when the computer has `os.setComputerLabel` set (may be empty).
+
 ## File operations
 
 All file requests require the editor to be authenticated (when auth is enabled) and the player must have access to the target computer (CC permission checks apply).
@@ -188,6 +206,16 @@ When files change in-game (e.g. via another editor or in-computer edit), the ser
 {"type":"file_deleted","computerId":"label:my-controller","path":"oldfile.lua"}
 ```
 
+### Open file in editor
+
+When a player runs `ccedit <file>` on a CC computer (in-game shell), the bridge pushes an open request to connected editors:
+
+```json
+{"type":"open_file","computerId":"label:my-controller","path":"startup.lua"}
+```
+
+Editors should set their active computer to `computerId` (if provided) and open `path`.
+
 ## Message reference
 
 | Type | Direction | Description |
@@ -206,11 +234,25 @@ When files change in-game (e.g. via another editor or in-computer edit), the ser
 | `file_write_ok` | S→E | Write succeeded |
 | `file_delete` | E→S | Delete file |
 | `file_delete_ok` | S→E | Delete succeeded |
+| `computer_list` | E→S | List accessible computers |
+| `computer_list_ok` | S→E | Computer list in `computers` |
 | `file_created` | S→E | In-game file created |
 | `file_modified` | S→E | In-game file modified |
 | `file_deleted` | S→E | In-game file deleted |
+| `open_file` | S→E | In-game `ccedit` requested editor open |
 
 S→E = server (bridge) to editor, E→S = editor to server (bridge).
+
+## In-game shell
+
+On computers with CC Editor Bridge installed, the ROM program `ccedit` opens a file in the connected editor:
+
+```
+ccedit startup.lua
+ccedit programs/miner.lua
+```
+
+Requires a connected editor client and an online player with access to the computer.
 
 ## Example: websocat
 

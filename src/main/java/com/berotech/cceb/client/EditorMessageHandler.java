@@ -65,8 +65,9 @@ public final class EditorMessageHandler {
             case FILE_READ -> EditorFileOperations.handleFileRead(connection, message);
             case FILE_WRITE -> EditorFileOperations.handleFileWrite(connection, message);
             case FILE_DELETE -> EditorFileOperations.handleFileDelete(connection, message);
-            case AUTH_OK, PONG, ERROR, FILE_CREATED, FILE_MODIFIED, FILE_DELETED,
-                    FILE_LIST_OK, FILE_READ_OK, FILE_WRITE_OK, FILE_DELETE_OK ->
+            case COMPUTER_LIST -> EditorFileOperations.handleComputerList(connection, message);
+            case AUTH_OK, PONG, ERROR, FILE_CREATED, FILE_MODIFIED, FILE_DELETED, OPEN_FILE,
+                    FILE_LIST_OK, FILE_READ_OK, FILE_WRITE_OK, FILE_DELETE_OK, COMPUTER_LIST_OK ->
                     sendError(connection, "Unexpected message type: " + message.type().wireName());
         }
     }

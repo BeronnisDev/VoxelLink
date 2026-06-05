@@ -17,7 +17,10 @@ public enum MessageType {
     FILE_WRITE("file_write"),
     FILE_WRITE_OK("file_write_ok"),
     FILE_DELETE("file_delete"),
-    FILE_DELETE_OK("file_delete_ok");
+    FILE_DELETE_OK("file_delete_ok"),
+    COMPUTER_LIST("computer_list"),
+    COMPUTER_LIST_OK("computer_list_ok"),
+    OPEN_FILE("open_file");
 
     private final String wireName;
 

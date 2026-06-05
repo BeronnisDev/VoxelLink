@@ -3,6 +3,7 @@ package com.berotech.cceb.cc;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +54,8 @@ public final class CCComputerLookup {
         }
     }
 
+    public record ListedComputer(String id, String label) {}
+
     public sealed interface ResolveResult {
         record Success(ResolvedComputer computer) implements ResolveResult {}
 
@@ -78,6 +81,92 @@ public final class CCComputerLookup {
             case ResolveResult.Success success -> Optional.of(success.computer());
             case ResolveResult.Failure ignored -> Optional.empty();
         };
+    }
+
+    public static List<ListedComputer> listAccessible(MinecraftServer server, ServerPlayer player) {
+        Map<BlockPos, ListedComputer> matches = new LinkedHashMap<>();
+        collectAccessibleFromRunningComputers(server, player, matches);
+        collectAccessibleFromLoadedChunks(server, player, matches);
+        return matches.values().stream()
+                .sorted(Comparator.comparing(
+                        computer -> computer.label() == null || computer.label().isBlank() ? computer.id() : computer.label(),
+                        String.CASE_INSENSITIVE_ORDER
+                ))
+                .toList();
+    }
+
+    private static void collectAccessibleFromRunningComputers(
+            MinecraftServer server,
+            ServerPlayer player,
+            Map<BlockPos, ListedComputer> matches
+    ) {
+        try {
+            Object context = SERVER_CONTEXT_GET.invoke(null, server);
+            Object registry = SERVER_CONTEXT_REGISTRY.invoke(context);
+            @SuppressWarnings("unchecked")
+            Collection<Object> computers = (Collection<Object>) SERVER_COMPUTER_REGISTRY_GET_COMPUTERS.invoke(registry);
+
+            for (Object computer : computers) {
+                ServerLevel level = (ServerLevel) SERVER_COMPUTER_GET_LEVEL.invoke(computer);
+                BlockPos position = (BlockPos) SERVER_COMPUTER_GET_POSITION.invoke(computer);
+                BlockEntity blockEntity = level.getBlockEntity(position);
+                tryAddAccessibleComputer(matches, blockEntity, player, level);
+            }
+        } catch (ReflectiveOperationException exception) {
+            // Fall back to loaded-chunk scan only.
+        }
+    }
+
+    private static void collectAccessibleFromLoadedChunks(
+            MinecraftServer server,
+            ServerPlayer player,
+            Map<BlockPos, ListedComputer> matches
+    ) {
+        ServerLevel level = player.serverLevel();
+        int viewDistance = server.getPlayerList().getViewDistance();
+        ChunkPos center = new ChunkPos(player.blockPosition());
+        for (int chunkX = center.x - viewDistance; chunkX <= center.x + viewDistance; chunkX++) {
+            for (int chunkZ = center.z - viewDistance; chunkZ <= center.z + viewDistance; chunkZ++) {
+                LevelChunk chunk = level.getChunkSource().getChunkNow(chunkX, chunkZ);
+                if (chunk == null) {
+                    continue;
+                }
+
+                for (BlockEntity blockEntity : chunk.getBlockEntities().values()) {
+                    tryAddAccessibleComputer(matches, blockEntity, player, level);
+                }
+            }
+        }
+    }
+
+    private static void tryAddAccessibleComputer(
+            Map<BlockPos, ListedComputer> matches,
+            BlockEntity blockEntity,
+            ServerPlayer player,
+            ServerLevel level
+    ) {
+        if (!CCComputerSupport.isComputerBlockEntity(blockEntity)) {
+            return;
+        }
+
+        BlockPos position = blockEntity.getBlockPos();
+        ResolveResult result = resolveFromBlockEntity(blockEntity, player, position);
+        if (!(result instanceof ResolveResult.Success)) {
+            return;
+        }
+
+        String id = PositionComputerReference.at(level, position).encode();
+        String label = null;
+        try {
+            label = CCComputerSupport.getLabel(blockEntity);
+            if (label != null && label.isBlank()) {
+                label = null;
+            }
+        } catch (ReflectiveOperationException exception) {
+            label = null;
+        }
+
+        matches.putIfAbsent(position, new ListedComputer(id, label));
     }
 
     private static ResolveResult resolveAtPosition(MinecraftServer server, ServerPlayer player, PositionComputerReference identifier) {

@@ -51,4 +51,26 @@ class EditorMessageCodecTest {
     void rejectsMissingType() {
         assertThrows(IllegalArgumentException.class, () -> EditorMessageCodec.decode("{\"message\":\"hello\"}"));
     }
+
+    @Test
+    void roundTripOpenFile() {
+        EditorMessage original = EditorMessage.openFile("label:test", "startup.lua");
+        EditorMessage decoded = EditorMessageCodec.decode(EditorMessageCodec.encode(original));
+        assertEquals(MessageType.OPEN_FILE, decoded.type());
+        assertEquals("label:test", decoded.computerId());
+        assertEquals("startup.lua", decoded.path());
+    }
+
+    @Test
+    void roundTripComputerListOk() {
+        EditorMessage original = EditorMessage.computerListOk(List.of(
+                new ComputerSummary("pos:minecraft:overworld:1:64:2", "controller"),
+                new ComputerSummary("pos:minecraft:overworld:3:64:4", null)
+        ));
+        EditorMessage decoded = EditorMessageCodec.decode(EditorMessageCodec.encode(original));
+        assertEquals(MessageType.COMPUTER_LIST_OK, decoded.type());
+        assertEquals(2, decoded.computers().size());
+        assertEquals("controller", decoded.computers().get(0).label());
+        assertEquals("pos:minecraft:overworld:3:64:4", decoded.computers().get(1).id());
+    }
 }

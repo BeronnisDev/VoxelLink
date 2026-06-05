@@ -2,6 +2,8 @@ package com.berotech.cceb.network.client;
 
 import java.util.concurrent.CompletableFuture;
 
+import com.berotech.cceb.network.payload.ComputerListRequestPayload;
+import com.berotech.cceb.network.payload.ComputerListResponsePayload;
 import com.berotech.cceb.network.payload.FileDeleteRequestPayload;
 import com.berotech.cceb.network.payload.FileDeleteResponsePayload;
 import com.berotech.cceb.network.payload.FileListRequestPayload;
@@ -45,6 +47,13 @@ public final class ClientPacketSender {
         int requestId = PendingRequests.nextId();
         CompletableFuture<FileDeleteResponsePayload> future = PendingRequests.register(requestId, REQUEST_TIMEOUT_SECONDS);
         send(new FileDeleteRequestPayload(requestId, computerId, path));
+        return future;
+    }
+
+    public static CompletableFuture<ComputerListResponsePayload> sendComputerListRequest() {
+        int requestId = PendingRequests.nextId();
+        CompletableFuture<ComputerListResponsePayload> future = PendingRequests.register(requestId, REQUEST_TIMEOUT_SECONDS);
+        send(new ComputerListRequestPayload(requestId));
         return future;
     }
 

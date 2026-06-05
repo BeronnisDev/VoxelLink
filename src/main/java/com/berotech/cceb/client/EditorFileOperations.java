@@ -1,9 +1,12 @@
 package com.berotech.cceb.client;
 
+import java.util.List;
+
 import org.java_websocket.WebSocket;
 
 import com.berotech.cceb.cc.CCPaths;
 import com.berotech.cceb.network.client.ClientPacketSender;
+import com.berotech.cceb.protocol.ComputerSummary;
 import com.berotech.cceb.protocol.EditorMessage;
 import com.berotech.cceb.protocol.EditorMessageCodec;
 
@@ -146,6 +149,29 @@ public final class EditorFileOperations {
                         return;
                     }
                     reply(connection, EditorMessage.fileDeleteOk(message.computerId(), message.path()));
+                })));
+    }
+
+    public static void handleComputerList(WebSocket connection, EditorMessage message) {
+        if (!preflight(connection)) {
+            return;
+        }
+
+        runOnClientThread(() -> ClientPacketSender.sendComputerListRequest()
+                .whenComplete((response, error) -> runOnClientThread(() -> {
+                    if (error != null) {
+                        replyError(connection, formatRequestError(error));
+                        return;
+                    }
+                    if (!response.isSuccess()) {
+                        replyError(connection, response.errorMessage());
+                        return;
+                    }
+
+                    List<ComputerSummary> computers = response.computers().stream()
+                            .map(entry -> new ComputerSummary(entry.id(), entry.label()))
+                            .toList();
+                    reply(connection, EditorMessage.computerListOk(computers));
                 })));
     }
 

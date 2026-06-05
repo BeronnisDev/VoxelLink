@@ -34,8 +34,9 @@ public final class EditorMessageCodec {
         String path = readOptionalString(object, "path");
         String content = readOptionalString(object, "content");
         List<String> files = readOptionalStringList(object, "files");
+        List<ComputerSummary> computers = readOptionalComputerList(object, "computers");
 
-        return new EditorMessage(type, message, token, computerId, path, content, files);
+        return new EditorMessage(type, message, token, computerId, path, content, files, computers);
     }
 
     public static String encode(EditorMessage message) {
@@ -62,6 +63,18 @@ public final class EditorMessageCodec {
                 array.add(file);
             }
             object.add("files", array);
+        }
+        if (message.computers() != null) {
+            JsonArray array = new JsonArray();
+            for (ComputerSummary computer : message.computers()) {
+                JsonObject entry = new JsonObject();
+                entry.addProperty("id", computer.id());
+                if (computer.label() != null && !computer.label().isBlank()) {
+                    entry.addProperty("label", computer.label());
+                }
+                array.add(entry);
+            }
+            object.add("computers", array);
         }
         return GSON.toJson(object);
     }
@@ -106,6 +119,32 @@ public final class EditorMessageCodec {
                 throw new IllegalArgumentException("'" + field + "' must contain strings");
             }
             values.add(element.getAsString());
+        }
+        return Collections.unmodifiableList(values);
+    }
+
+    private static List<ComputerSummary> readOptionalComputerList(JsonObject object, String field) {
+        if (!object.has(field) || object.get(field).isJsonNull()) {
+            return null;
+        }
+
+        if (!object.get(field).isJsonArray()) {
+            throw new IllegalArgumentException("'" + field + "' must be an array");
+        }
+
+        JsonArray array = object.getAsJsonArray(field);
+        List<ComputerSummary> values = new ArrayList<>(array.size());
+        for (JsonElement element : array) {
+            if (!element.isJsonObject()) {
+                throw new IllegalArgumentException("'" + field + "' must contain objects");
+            }
+            JsonObject entry = element.getAsJsonObject();
+            if (!entry.has("id") || !entry.get("id").isJsonPrimitive()) {
+                throw new IllegalArgumentException("Computer entries must include string 'id'");
+            }
+            String id = entry.get("id").getAsString();
+            String label = readOptionalString(entry, "label");
+            values.add(new ComputerSummary(id, label));
         }
         return Collections.unmodifiableList(values);
     }

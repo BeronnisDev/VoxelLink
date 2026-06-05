@@ -13,6 +13,7 @@ editor <-> client (WebSocket) <-> server (packets) <-> CC computer filesystem
 - File list / read / write / delete against CC computer HDD storage
 - Real-time file change events pushed to editors
 - Computer identification by position (`pos:`) or CC label (`label:`)
+- In-game `ccedit` shell command to open files in a connected editor
 
 ## Quick start
 

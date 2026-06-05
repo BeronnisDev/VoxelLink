@@ -1,6 +1,8 @@
 package com.berotech.cceb.network;
 
 import com.berotech.cceb.network.client.ClientResponseHandler;
+import com.berotech.cceb.network.payload.ComputerListRequestPayload;
+import com.berotech.cceb.network.payload.ComputerListResponsePayload;
 import com.berotech.cceb.network.payload.ErrorResponsePayload;
 import com.berotech.cceb.network.payload.FileDeleteRequestPayload;
 import com.berotech.cceb.network.payload.FileDeleteResponsePayload;
@@ -11,6 +13,7 @@ import com.berotech.cceb.network.payload.FileReadRequestPayload;
 import com.berotech.cceb.network.payload.FileReadResponsePayload;
 import com.berotech.cceb.network.payload.FileWriteRequestPayload;
 import com.berotech.cceb.network.payload.FileWriteResponsePayload;
+import com.berotech.cceb.network.payload.OpenEditorPayload;
 import com.berotech.cceb.network.server.ServerPacketHandler;
 
 import net.neoforged.bus.api.IEventBus;
@@ -33,12 +36,15 @@ public final class BridgeNetworking {
         registrar.playToServer(FileReadRequestPayload.TYPE, FileReadRequestPayload.STREAM_CODEC, ServerPacketHandler::handleFileRead);
         registrar.playToServer(FileWriteRequestPayload.TYPE, FileWriteRequestPayload.STREAM_CODEC, ServerPacketHandler::handleFileWrite);
         registrar.playToServer(FileDeleteRequestPayload.TYPE, FileDeleteRequestPayload.STREAM_CODEC, ServerPacketHandler::handleFileDelete);
+        registrar.playToServer(ComputerListRequestPayload.TYPE, ComputerListRequestPayload.STREAM_CODEC, ServerPacketHandler::handleComputerList);
 
         registrar.playToClient(FileListResponsePayload.TYPE, FileListResponsePayload.STREAM_CODEC, ClientResponseHandler::handleFileList);
         registrar.playToClient(FileReadResponsePayload.TYPE, FileReadResponsePayload.STREAM_CODEC, ClientResponseHandler::handleFileRead);
         registrar.playToClient(FileWriteResponsePayload.TYPE, FileWriteResponsePayload.STREAM_CODEC, ClientResponseHandler::handleFileWrite);
         registrar.playToClient(FileDeleteResponsePayload.TYPE, FileDeleteResponsePayload.STREAM_CODEC, ClientResponseHandler::handleFileDelete);
+        registrar.playToClient(ComputerListResponsePayload.TYPE, ComputerListResponsePayload.STREAM_CODEC, ClientResponseHandler::handleComputerList);
         registrar.playToClient(ErrorResponsePayload.TYPE, ErrorResponsePayload.STREAM_CODEC, ClientResponseHandler::handleError);
         registrar.playToClient(FileEventPayload.TYPE, FileEventPayload.STREAM_CODEC, ClientResponseHandler::handleFileEvent);
+        registrar.playToClient(OpenEditorPayload.TYPE, OpenEditorPayload.STREAM_CODEC, ClientResponseHandler::handleOpenEditor);
     }
 }
