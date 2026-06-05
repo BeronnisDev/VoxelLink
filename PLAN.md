@@ -59,18 +59,18 @@ Build a Minecraft 1.21.1 NeoForge mod that bridges external editors with CC: Twe
   - [x] Bind to `localhost:<configPort>`
   - [x] Add basic connection handler (log connections/disconnections)
   - [x] Add graceful shutdown on client disconnect
-- **Test**: Launch client, connect via `websocat ws://localhost:8765`, verify connection opens/closes — [ ]
-- **Acceptance**: Server accepts connections, logs events, shuts down cleanly — [ ]
+- **Test**: Launch client, connect via `websocat ws://localhost:8765`, verify connection opens/closes — [x]
+- **Acceptance**: Server accepts connections, logs events, shuts down cleanly — [x]
 
 ### Task 2.3: Add Basic Message Protocol
 - **Goal**: Client and editor can exchange JSON messages
 - **Steps**:
-  - [ ] Define message types: `PING`, `PONG`, `ERROR`
-  - [ ] Create message serialization/deserialization using Gson or Moshi
-  - [ ] Implement echo/hello handshake
-  - [ ] Add message framing/validation
-- **Test**: Connect editor client, send handshake, verify response — [ ]
-- **Acceptance**: Editor can connect, send `{"type":"ping"}`, receive `{"type":"pong"}` — [ ]
+  - [x] Define message types: `PING`, `PONG`, `ERROR`
+  - [x] Create message serialization/deserialization using Gson or Moshi
+  - [x] Implement echo/hello handshake
+  - [x] Add message framing/validation
+- **Test**: Connect editor client, send handshake, verify response — [x]
+- **Acceptance**: Editor can connect, send `{"type":"ping"}`, receive `{"type":"pong"}` — [x]
 
 ### Task 2.4: Add Authentication
 - **Goal**: Unauthorized editors are rejected
