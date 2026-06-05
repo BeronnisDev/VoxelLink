@@ -9,7 +9,15 @@ public enum MessageType {
     AUTH_OK("auth_ok"),
     FILE_CREATED("file_created"),
     FILE_MODIFIED("file_modified"),
-    FILE_DELETED("file_deleted");
+    FILE_DELETED("file_deleted"),
+    FILE_LIST("file_list"),
+    FILE_LIST_OK("file_list_ok"),
+    FILE_READ("file_read"),
+    FILE_READ_OK("file_read_ok"),
+    FILE_WRITE("file_write"),
+    FILE_WRITE_OK("file_write_ok"),
+    FILE_DELETE("file_delete"),
+    FILE_DELETE_OK("file_delete_ok");
 
     private final String wireName;
 

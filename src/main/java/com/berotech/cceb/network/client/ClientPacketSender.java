@@ -48,10 +48,6 @@ public final class ClientPacketSender {
         return future;
     }
 
-    public static CompletableFuture<FileListResponsePayload> sendTestFileListRequest() {
-        return sendFileListRequest("test-computer", "/");
-    }
-
     private static void send(CustomPacketPayload payload) {
         if (Minecraft.getInstance().getConnection() == null) {
             throw new IllegalStateException("Cannot send bridge packet while not connected to a world");

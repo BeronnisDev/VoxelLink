@@ -52,7 +52,12 @@ public final class EditorMessageHandler {
             case PING -> send(connection, EditorMessage.pong());
             case HELLO -> sendHello(connection);
             case AUTH -> sendError(connection, "Already authenticated");
-            case AUTH_OK, PONG, ERROR, FILE_CREATED, FILE_MODIFIED, FILE_DELETED ->
+            case FILE_LIST -> EditorFileOperations.handleFileList(connection, message);
+            case FILE_READ -> EditorFileOperations.handleFileRead(connection, message);
+            case FILE_WRITE -> EditorFileOperations.handleFileWrite(connection, message);
+            case FILE_DELETE -> EditorFileOperations.handleFileDelete(connection, message);
+            case AUTH_OK, PONG, ERROR, FILE_CREATED, FILE_MODIFIED, FILE_DELETED,
+                    FILE_LIST_OK, FILE_READ_OK, FILE_WRITE_OK, FILE_DELETE_OK ->
                     sendError(connection, "Unexpected message type: " + message.type().wireName());
         }
     }

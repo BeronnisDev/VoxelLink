@@ -1,6 +1,11 @@
 package com.berotech.cceb.protocol;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -27,8 +32,10 @@ public final class EditorMessageCodec {
         String token = readOptionalString(object, "token");
         String computerId = readOptionalString(object, "computerId");
         String path = readOptionalString(object, "path");
+        String content = readOptionalString(object, "content");
+        List<String> files = readOptionalStringList(object, "files");
 
-        return new EditorMessage(type, message, token, computerId, path);
+        return new EditorMessage(type, message, token, computerId, path, content, files);
     }
 
     public static String encode(EditorMessage message) {
@@ -45,6 +52,16 @@ public final class EditorMessageCodec {
         }
         if (message.path() != null) {
             object.addProperty("path", message.path());
+        }
+        if (message.content() != null) {
+            object.addProperty("content", message.content());
+        }
+        if (message.files() != null) {
+            JsonArray array = new JsonArray();
+            for (String file : message.files()) {
+                array.add(file);
+            }
+            object.add("files", array);
         }
         return GSON.toJson(object);
     }
@@ -71,5 +88,25 @@ public final class EditorMessageCodec {
         }
 
         return object.get(field).getAsString();
+    }
+
+    private static List<String> readOptionalStringList(JsonObject object, String field) {
+        if (!object.has(field) || object.get(field).isJsonNull()) {
+            return null;
+        }
+
+        if (!object.get(field).isJsonArray()) {
+            throw new IllegalArgumentException("'" + field + "' must be an array");
+        }
+
+        JsonArray array = object.getAsJsonArray(field);
+        List<String> values = new ArrayList<>(array.size());
+        for (JsonElement element : array) {
+            if (!element.isJsonPrimitive()) {
+                throw new IllegalArgumentException("'" + field + "' must contain strings");
+            }
+            values.add(element.getAsString());
+        }
+        return Collections.unmodifiableList(values);
     }
 }

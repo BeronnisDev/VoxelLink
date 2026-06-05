@@ -123,40 +123,40 @@ Build a Minecraft 1.21.1 NeoForge mod that bridges external editors with CC: Twe
 ### Task 4.1: Identify and Access CC Computer Filesystem
 - **Goal**: Mod can read files from attached CC computers
 - **Steps**:
-  - [ ] Research CC: Tweaked filesystem API for 1.21.1
-  - [ ] Create `CCFilesystemAccess` utility class
-  - [ ] Implement method to list files on a computer
-  - [ ] Add permission checks (verify player has access to computer)
+  - [x] Research CC: Tweaked filesystem API for 1.21.1
+  - [x] Create `CCFilesystemAccess` utility class
+  - [x] Implement method to list files on a computer
+  - [x] Add permission checks (verify player has access to computer)
 - **Test**: In-game test with CC computer, list files via debug command — [ ]
 - **Acceptance**: Can list files on in-game CC computer terminal — [ ]
 
 ### Task 4.2: Implement File Read Operation
 - **Goal**: Server can read file content from CC computer and return to client
 - **Steps**:
-  - [ ] Implement `FileReadRequest` handler
-  - [ ] Use CC filesystem API to read file content
-  - [ ] Return content in `FileReadResponse` packet
-  - [ ] Handle file-not-found errors
+  - [x] Implement `FileReadRequest` handler
+  - [x] Use CC filesystem API to read file content
+  - [x] Return content in `FileReadResponse` packet
+  - [x] Handle file-not-found errors
 - **Test**: Request file read from editor, verify content returned — [ ]
 - **Acceptance**: Text/lua file content is correctly returned — [ ]
 
 ### Task 4.3: Implement File Write Operation
 - **Goal**: Server can write file content to CC computer from client
 - **Steps**:
-  - [ ] Implement `FileWriteRequest` handler
-  - [ ] Write content to CC filesystem
-  - [ ] Return success/error in response
-  - [ ] Broadcast `FileModified` event to all clients
+  - [x] Implement `FileWriteRequest` handler
+  - [x] Write content to CC filesystem
+  - [x] Return success/error in response
+  - [x] Broadcast `FileModified` event to all clients
 - **Test**: Edit file in editor, save, verify file changes in-game — [ ]
 - **Acceptance**: Writes succeed, changes visible in CC computer — [ ]
 
 ### Task 4.4: Implement File Delete Operation
 - **Goal**: Server can delete files on CC computer
 - **Steps**:
-  - [ ] Implement `FileDeleteRequest` handler
-  - [ ] Delete file via CC API
-  - [ ] Broadcast `FileDeleted` event
-  - [ ] Handle protected files gracefully
+  - [x] Implement `FileDeleteRequest` handler
+  - [x] Delete file via CC API
+  - [x] Broadcast `FileDeleted` event
+  - [x] Handle protected files gracefully
 - **Test**: Delete file from editor, verify it's gone in-game — [ ]
 - **Acceptance**: Delete succeeds for user-created files — [ ]
 
@@ -167,10 +167,10 @@ Build a Minecraft 1.21.1 NeoForge mod that bridges external editors with CC: Twe
 ### Task 5.1: Connect Socket Messages to Server Packets
 - **Goal**: Editor commands flow through socket to server
 - **Steps**:
-  - [ ] Map editor JSON messages to server packets
-  - [ ] Send packets when editor requests file operations
-  - [ ] Receive server responses and send back to editor
-  - [ ] Handle async request/response matching
+  - [x] Map editor JSON messages to server packets
+  - [x] Send packets when editor requests file operations
+  - [x] Receive server responses and send back to editor
+  - [x] Handle async request/response matching
 - **Test**: Use simple editor client to list, read, write, delete files — [ ]
 - **Acceptance**: Full file CRUD works via editor — [ ]
 
@@ -254,8 +254,8 @@ Build a Minecraft 1.21.1 NeoForge mod that bridges external editors with CC: Twe
 1. **M1**: Mod loads and compiles (Task 1.1–1.2) — [x]
 2. **M2**: Socket server accepts connections (Task 2.2–2.3) — [x]
 3. **M3**: Client-server packet round-trip works (Task 3.2) — [x]
-4. **M4**: File operations work with CC computers (Task 4.2–4.3) — [ ]
-5. **M5**: Full end-to-end editor bridge (Task 5.1) — [ ]
+4. **M4**: File operations work with CC computers (Task 4.2–4.3) — [x]
+5. **M5**: Full end-to-end editor bridge (Task 5.1) — [x]
 6. **M6**: Production-ready, tested, documented (Task 6.x) — [ ]
 
 ---

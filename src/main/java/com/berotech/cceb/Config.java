@@ -26,6 +26,10 @@ public class Config {
             .comment("Skip auth checks during development even when authToken is set.")
             .define("skipAuthForDev", false);
 
+    public static final ModConfigSpec.BooleanValue PREFER_LABEL_IDS = BUILDER
+            .comment("When targeting a looked-at computer, prefer label:<name> over pos:<dimension>:x:y:z if the computer has a label set via os.setComputerLabel.")
+            .define("preferLabelIds", true);
+
     static final ModConfigSpec SPEC = BUILDER.build();
 
     @SubscribeEvent
@@ -44,12 +48,13 @@ public class Config {
 
     private static void logConfig(String action) {
         CCEditorBridge.LOGGER.info(
-                "Bridge config {}: enabled={}, port={}, authToken={}, skipAuthForDev={}",
+                "Bridge config {}: enabled={}, port={}, authToken={}, skipAuthForDev={}, preferLabelIds={}",
                 action,
                 ENABLED.get(),
                 SOCKET_PORT.get(),
                 AUTH_TOKEN.get().isEmpty() ? "(none)" : "(set)",
-                SKIP_AUTH_FOR_DEV.get()
+                SKIP_AUTH_FOR_DEV.get(),
+                PREFER_LABEL_IDS.get()
         );
     }
 }
