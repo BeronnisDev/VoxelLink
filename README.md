@@ -24,6 +24,7 @@ enabled = true
 socketPort = 8765
 authToken = "your-secret-token"
 preferLabelIds = true
+maxOperationsPerMinute = 120
 ```
 
 3. In-game, look at a CC computer and run `/cceditor id` to get its computer id
@@ -52,3 +53,21 @@ preferLabelIds = true
 ```
 
 Requires Java 21.
+
+### Multiplayer / dedicated server testing
+
+NeoForge includes a dedicated server run config. Use two terminals:
+
+**Terminal 1 — dedicated server**
+```powershell
+./gradlew runServer
+```
+
+**Terminal 2 — client**
+```powershell
+./gradlew runClient
+```
+
+Connect the client to `localhost` (default port `25565`). The server uses `run-server/` so it can run at the same time as the client (`run/`).
+
+CC: Tweaked is included automatically in both runs via `localRuntime`. Each connected player gets their own localhost WebSocket bridge on their client.

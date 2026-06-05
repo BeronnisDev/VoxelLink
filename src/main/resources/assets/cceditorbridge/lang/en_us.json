@@ -1,8 +1,4 @@
 {
-  "itemGroup.cceditorbridge": "Example Mod Tab",
-  "block.cceditorbridge.example_block": "Example Block",
-  "item.cceditorbridge.example_item": "Example Item",
-
   "cceditorbridge.configuration.title": "CC Editor Bridge Configs",
   "cceditorbridge.configuration.section.cceditorbridge.client.toml": "Editor Bridge",
   "cceditorbridge.configuration.section.cceditorbridge.client.toml.title": "Editor Bridge",

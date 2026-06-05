@@ -1,11 +1,20 @@
 package com.berotech.cceb.cc;
 
 public final class CCPaths {
+    public static final int MAX_PATH_LENGTH = 512;
+
     private CCPaths() {}
 
     public static String normalize(String path) {
         if (path == null || path.isEmpty() || "/".equals(path)) {
             return "";
+        }
+
+        if (path.length() > MAX_PATH_LENGTH) {
+            throw new IllegalArgumentException("Invalid path: exceeds maximum length of " + MAX_PATH_LENGTH);
+        }
+        if (path.indexOf('\0') >= 0) {
+            throw new IllegalArgumentException("Invalid path: contains null character");
         }
 
         String normalized = path.replace('\\', '/');
@@ -15,6 +24,10 @@ public final class CCPaths {
 
         if (normalized.isEmpty()) {
             return "";
+        }
+
+        if (normalized.length() > MAX_PATH_LENGTH) {
+            throw new IllegalArgumentException("Invalid path: exceeds maximum length of " + MAX_PATH_LENGTH);
         }
 
         for (String segment : normalized.split("/")) {

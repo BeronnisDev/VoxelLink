@@ -30,6 +30,10 @@ public class Config {
             .comment("When targeting a looked-at computer, prefer label:<name> over pos:<dimension>:x:y:z if the computer has a label set via os.setComputerLabel.")
             .define("preferLabelIds", true);
 
+    public static final ModConfigSpec.IntValue MAX_OPERATIONS_PER_MINUTE = BUILDER
+            .comment("Maximum file operations per editor connection per minute. Set to 0 to disable rate limiting.")
+            .defineInRange("maxOperationsPerMinute", 120, 0, 10_000);
+
     static final ModConfigSpec SPEC = BUILDER.build();
 
     @SubscribeEvent
@@ -48,13 +52,14 @@ public class Config {
 
     private static void logConfig(String action) {
         CCEditorBridge.LOGGER.info(
-                "Bridge config {}: enabled={}, port={}, authToken={}, skipAuthForDev={}, preferLabelIds={}",
+                "Bridge config {}: enabled={}, port={}, authToken={}, skipAuthForDev={}, preferLabelIds={}, maxOperationsPerMinute={}",
                 action,
                 ENABLED.get(),
                 SOCKET_PORT.get(),
                 AUTH_TOKEN.get().isEmpty() ? "(none)" : "(set)",
                 SKIP_AUTH_FOR_DEV.get(),
-                PREFER_LABEL_IDS.get()
+                PREFER_LABEL_IDS.get(),
+                MAX_OPERATIONS_PER_MINUTE.get()
         );
     }
 }

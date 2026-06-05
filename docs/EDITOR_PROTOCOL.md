@@ -12,6 +12,7 @@ The WebSocket server runs on the **Minecraft client** only, bound to `127.0.0.1`
 | Port | `8765` | `socketPort` |
 | Enabled | `false` | `enabled` |
 | Auth token | (none) | `authToken` |
+| Rate limit | 120 ops/min | `maxOperationsPerMinute` (0 = unlimited) |
 
 Connect with any WebSocket client:
 
@@ -240,6 +241,19 @@ In-game client commands (single-player / client):
 
 - WebSocket binds to **localhost only** — not exposed to the network
 - Optional token auth on connect
+- Per-connection rate limiting (`maxOperationsPerMinute` config, default 120)
 - File access respects CC: Tweaked permission checks (`isUsable`)
-- Path traversal is blocked
+- Path traversal, null bytes, and oversized paths are blocked
 - The Minecraft server never opens a socket to editors
+- Each player's bridge only forwards packets from their own Minecraft client session
+
+## Reconnection
+
+Editors should treat the WebSocket as a persistent session that may drop at any time (game exit, config reload, etc.). To reconnect:
+
+1. Open a new WebSocket to `ws://127.0.0.1:<port>/`
+2. Wait for `hello`
+3. Send `auth` again if required
+4. Resume file operations
+
+The bridge does not replay missed file events after reconnect.

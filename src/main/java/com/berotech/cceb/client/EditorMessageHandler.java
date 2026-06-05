@@ -34,10 +34,19 @@ public final class EditorMessageHandler {
         try {
             message = EditorMessageCodec.decode(rawMessage);
         } catch (IllegalArgumentException exception) {
-            reject(connection, exception.getMessage());
+            sendError(connection, exception.getMessage());
             return;
         }
 
+        try {
+            handleDecoded(connection, message);
+        } catch (RuntimeException exception) {
+            CCEditorBridge.LOGGER.error("Unexpected editor protocol error", exception);
+            sendError(connection, "Internal bridge error");
+        }
+    }
+
+    private static void handleDecoded(WebSocket connection, EditorMessage message) {
         EditorConnectionState state = getState(connection);
         if (!state.isAuthenticated()) {
             if (message.type() != MessageType.AUTH) {

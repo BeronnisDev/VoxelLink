@@ -65,6 +65,8 @@ neoForge {
         server {
             server()
             programArgument '--nogui'
+            // Separate directory so runClient and runServer can run at the same time for multiplayer testing.
+            gameDirectory = project.file('run-server')
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
 
@@ -136,6 +138,11 @@ dependencies {
     // Required for gradlew runClient on MC 1.21.8 and below — library is not a mod
     clientAdditionalRuntimeClasspath "org.java-websocket:Java-WebSocket:${websocket_version}"
 
+    testImplementation platform('org.junit:junit-bom:5.11.4')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testRuntimeOnly sourceSets.main.runtimeClasspath
+
     // Example optional mod dependency with JEI
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
     // compileOnly "mezz.jei:jei-${mc_version}-common-api:${jei_version}"
@@ -200,6 +207,10 @@ publishing {
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+}
+
+tasks.test {
+    useJUnitPlatform()
 }
 
 // IDEA no longer automatically downloads sources/javadoc jars for dependencies, so we need to explicitly enable the behavior.
