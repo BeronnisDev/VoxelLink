@@ -24,8 +24,9 @@ public final class EditorMessageCodec {
 
         MessageType type = MessageType.fromWireName(object.get("type").getAsString());
         String message = readOptionalString(object, "message");
+        String token = readOptionalString(object, "token");
 
-        return new EditorMessage(type, message);
+        return new EditorMessage(type, message, token);
     }
 
     public static String encode(EditorMessage message) {
@@ -33,6 +34,9 @@ public final class EditorMessageCodec {
         object.addProperty("type", message.type().wireName());
         if (message.message() != null) {
             object.addProperty("message", message.message());
+        }
+        if (message.token() != null) {
+            object.addProperty("token", message.token());
         }
         return GSON.toJson(object);
     }

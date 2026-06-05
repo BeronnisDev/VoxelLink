@@ -4,7 +4,9 @@ public enum MessageType {
     PING("ping"),
     PONG("pong"),
     ERROR("error"),
-    HELLO("hello");
+    HELLO("hello"),
+    AUTH("auth"),
+    AUTH_OK("auth_ok");
 
     private final String wireName;
 

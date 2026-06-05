@@ -17,7 +17,7 @@ public class EditorSocketServer extends WebSocketServer {
     @Override
     public void onOpen(WebSocket connection, ClientHandshake handshake) {
         CCEditorBridge.LOGGER.info("Editor connected from {}", connection.getRemoteSocketAddress());
-        EditorMessageHandler.sendHello(connection);
+        EditorMessageHandler.onConnect(connection);
     }
 
     @Override

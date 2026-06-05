@@ -22,6 +22,10 @@ public class Config {
             .comment("Optional auth token editors must send on connect. Leave empty to disable.")
             .define("authToken", "");
 
+    public static final ModConfigSpec.BooleanValue SKIP_AUTH_FOR_DEV = BUILDER
+            .comment("Skip auth checks during development even when authToken is set.")
+            .define("skipAuthForDev", false);
+
     static final ModConfigSpec SPEC = BUILDER.build();
 
     @SubscribeEvent
@@ -40,11 +44,12 @@ public class Config {
 
     private static void logConfig(String action) {
         CCEditorBridge.LOGGER.info(
-                "Bridge config {}: enabled={}, port={}, authToken={}",
+                "Bridge config {}: enabled={}, port={}, authToken={}, skipAuthForDev={}",
                 action,
                 ENABLED.get(),
                 SOCKET_PORT.get(),
-                AUTH_TOKEN.get().isEmpty() ? "(none)" : "(set)"
+                AUTH_TOKEN.get().isEmpty() ? "(none)" : "(set)",
+                SKIP_AUTH_FOR_DEV.get()
         );
     }
 }

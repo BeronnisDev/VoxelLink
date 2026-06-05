@@ -8,5 +8,6 @@
   "cceditorbridge.configuration.section.cceditorbridge.client.toml.title": "Editor Bridge",
   "cceditorbridge.configuration.enabled": "Enable Editor Bridge",
   "cceditorbridge.configuration.socketPort": "WebSocket Port",
-  "cceditorbridge.configuration.authToken": "Auth Token"
+  "cceditorbridge.configuration.authToken": "Auth Token",
+  "cceditorbridge.configuration.skipAuthForDev": "Skip Auth For Dev"
 }

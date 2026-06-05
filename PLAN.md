@@ -75,12 +75,12 @@ Build a Minecraft 1.21.1 NeoForge mod that bridges external editors with CC: Twe
 ### Task 2.4: Add Authentication
 - **Goal**: Unauthorized editors are rejected
 - **Steps**:
-  - [ ] Require auth token on connection (first message after WebSocket open)
-  - [ ] Compare against config value
-  - [ ] Close connection with error if auth fails
-  - [ ] Add optional auth bypass (for development)
-- **Test**: Connect with wrong token, verify rejection. Connect with correct token, verify acceptance. — [ ]
-- **Acceptance**: Invalid tokens are rejected within 1 message, valid tokens proceed — [ ]
+  - [x] Require auth token on connection (first message after WebSocket open)
+  - [x] Compare against config value
+  - [x] Close connection with error if auth fails
+  - [x] Add optional auth bypass (for development)
+- **Test**: Connect with wrong token, verify rejection. Connect with correct token, verify acceptance. — [x]
+- **Acceptance**: Invalid tokens are rejected within 1 message, valid tokens proceed — [x]
 
 ---
 
@@ -252,7 +252,7 @@ Build a Minecraft 1.21.1 NeoForge mod that bridges external editors with CC: Twe
 ## Key Milestones
 
 1. **M1**: Mod loads and compiles (Task 1.1–1.2) — [x]
-2. **M2**: Socket server accepts connections (Task 2.2–2.3) — [ ]
+2. **M2**: Socket server accepts connections (Task 2.2–2.3) — [x]
 3. **M3**: Client-server packet round-trip works (Task 3.2) — [ ]
 4. **M4**: File operations work with CC computers (Task 4.2–4.3) — [ ]
 5. **M5**: Full end-to-end editor bridge (Task 5.1) — [ ]
