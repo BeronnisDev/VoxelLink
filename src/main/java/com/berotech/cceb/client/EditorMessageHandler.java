@@ -52,7 +52,8 @@ public final class EditorMessageHandler {
             case PING -> send(connection, EditorMessage.pong());
             case HELLO -> sendHello(connection);
             case AUTH -> sendError(connection, "Already authenticated");
-            case AUTH_OK, PONG, ERROR -> sendError(connection, "Unexpected message type: " + message.type().wireName());
+            case AUTH_OK, PONG, ERROR, FILE_CREATED, FILE_MODIFIED, FILE_DELETED ->
+                    sendError(connection, "Unexpected message type: " + message.type().wireName());
         }
     }
 

@@ -4,6 +4,11 @@ import java.net.InetSocketAddress;
 
 import com.berotech.cceb.CCEditorBridge;
 import com.berotech.cceb.Config;
+import com.berotech.cceb.network.payload.FileEventPayload;
+import com.berotech.cceb.network.payload.FileEventType;
+import com.berotech.cceb.protocol.EditorMessage;
+import com.berotech.cceb.protocol.EditorMessageCodec;
+import com.berotech.cceb.protocol.MessageType;
 
 public final class EditorBridgeService {
     private static EditorSocketServer server;
@@ -45,6 +50,27 @@ public final class EditorBridgeService {
 
     public static boolean isRunning() {
         return server != null;
+    }
+
+    public static void forwardFileEvent(FileEventPayload payload) {
+        if (server == null) {
+            return;
+        }
+
+        MessageType messageType = switch (payload.eventType()) {
+            case CREATED -> MessageType.FILE_CREATED;
+            case MODIFIED -> MessageType.FILE_MODIFIED;
+            case DELETED -> MessageType.FILE_DELETED;
+        };
+
+        String json = EditorMessageCodec.encode(EditorMessage.fileEvent(messageType, payload.computerId(), payload.path()));
+        server.broadcastToAuthenticated(json);
+        CCEditorBridge.LOGGER.info(
+                "Forwarded {} event for computer '{}' path '{}' to editor clients",
+                payload.eventType(),
+                payload.computerId(),
+                payload.path()
+        );
     }
 
     private static void registerShutdownHook() {

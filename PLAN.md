@@ -89,32 +89,32 @@ Build a Minecraft 1.21.1 NeoForge mod that bridges external editors with CC: Twe
 ### Task 3.1: Define Custom Packets
 - **Goal**: Mod can send/receive custom packets between client and server
 - **Steps**:
-  - [ ] Create packet registry/handler class
-  - [ ] Define packet types: `FileListRequest`, `FileReadRequest`, `FileWriteRequest`, `FileDeleteRequest`, `ErrorResponse`
-  - [ ] Create packet classes with `ByteBuf` serialization (NeoForge networking)
-  - [ ] Register packets on mod startup
+  - [x] Create packet registry/handler class
+  - [x] Define packet types: `FileListRequest`, `FileReadRequest`, `FileWriteRequest`, `FileDeleteRequest`, `ErrorResponse`
+  - [x] Create packet classes with `ByteBuf` serialization (NeoForge networking)
+  - [x] Register packets on mod startup
 - **Test**: Write unit tests for packet serialization round-trip — [ ]
 - **Acceptance**: Packets serialize/deserialize correctly, test coverage >80% — [ ]
 
 ### Task 3.2: Implement Client-to-Server Messaging
 - **Goal**: Client can send requests to server and receive responses
 - **Steps**:
-  - [ ] Create `ClientPacketSender` utility for sending packets from client to server
-  - [ ] Create `ServerPacketHandler` to process incoming client packets
-  - [ ] Implement request/response correlation (use request ID to match responses)
-  - [ ] Add timeout handling for requests
-- **Test**: In dev environment, send test packet from client, verify it arrives on server — [ ]
-- **Acceptance**: Client can send packet and receive correlated response — [ ]
+  - [x] Create `ClientPacketSender` utility for sending packets from client to server
+  - [x] Create `ServerPacketHandler` to process incoming client packets
+  - [x] Implement request/response correlation (use request ID to match responses)
+  - [x] Add timeout handling for requests
+- **Test**: In dev environment, send test packet from client, verify it arrives on server — [x]
+- **Acceptance**: Client can send packet and receive correlated response — [x]
 
 ### Task 3.3: Implement Server-to-Client Messaging (File Events)
 - **Goal**: Server pushes file change events to client
 - **Steps**:
-  - [ ] Create event types: `FileCreated`, `FileModified`, `FileDeleted`
-  - [ ] Implement server-side event emitter
-  - [ ] Add client-side packet handler for unsolicited server messages
-  - [ ] Forward events to connected editor via WebSocket
-- **Test**: Trigger file event on server, verify it reaches client and is forwarded — [ ]
-- **Acceptance**: Server file changes are forwarded to editor in real-time — [ ]
+  - [x] Create event types: `FileCreated`, `FileModified`, `FileDeleted`
+  - [x] Implement server-side event emitter
+  - [x] Add client-side packet handler for unsolicited server messages
+  - [x] Forward events to connected editor via WebSocket
+- **Test**: Trigger file event on server, verify it reaches client and is forwarded — [x]
+- **Acceptance**: Server file changes are forwarded to editor in real-time — [x]
 
 ---
 
@@ -253,7 +253,7 @@ Build a Minecraft 1.21.1 NeoForge mod that bridges external editors with CC: Twe
 
 1. **M1**: Mod loads and compiles (Task 1.1–1.2) — [x]
 2. **M2**: Socket server accepts connections (Task 2.2–2.3) — [x]
-3. **M3**: Client-server packet round-trip works (Task 3.2) — [ ]
+3. **M3**: Client-server packet round-trip works (Task 3.2) — [x]
 4. **M4**: File operations work with CC computers (Task 4.2–4.3) — [ ]
 5. **M5**: Full end-to-end editor bridge (Task 5.1) — [ ]
 6. **M6**: Production-ready, tested, documented (Task 6.x) — [ ]

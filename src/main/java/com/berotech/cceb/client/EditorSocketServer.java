@@ -44,4 +44,13 @@ public class EditorSocketServer extends WebSocketServer {
     public void onStart() {
         CCEditorBridge.LOGGER.info("Editor WebSocket server listening on ws://127.0.0.1:{}/", getAddress().getPort());
     }
+
+    public void broadcastToAuthenticated(String message) {
+        for (WebSocket connection : getConnections()) {
+            EditorConnectionState state = (EditorConnectionState) connection.getAttachment();
+            if (state != null && state.isAuthenticated()) {
+                connection.send(message);
+            }
+        }
+    }
 }

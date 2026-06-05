@@ -25,8 +25,10 @@ public final class EditorMessageCodec {
         MessageType type = MessageType.fromWireName(object.get("type").getAsString());
         String message = readOptionalString(object, "message");
         String token = readOptionalString(object, "token");
+        String computerId = readOptionalString(object, "computerId");
+        String path = readOptionalString(object, "path");
 
-        return new EditorMessage(type, message, token);
+        return new EditorMessage(type, message, token, computerId, path);
     }
 
     public static String encode(EditorMessage message) {
@@ -37,6 +39,12 @@ public final class EditorMessageCodec {
         }
         if (message.token() != null) {
             object.addProperty("token", message.token());
+        }
+        if (message.computerId() != null) {
+            object.addProperty("computerId", message.computerId());
+        }
+        if (message.path() != null) {
+            object.addProperty("path", message.path());
         }
         return GSON.toJson(object);
     }

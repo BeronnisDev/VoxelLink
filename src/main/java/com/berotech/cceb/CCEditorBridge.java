@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
 
+import com.berotech.cceb.network.BridgeNetworking;
+
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.food.FoodProperties;
@@ -79,6 +81,8 @@ public class CCEditorBridge {
 
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
+
+        BridgeNetworking.register(modEventBus);
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {

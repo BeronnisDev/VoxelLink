@@ -6,7 +6,10 @@ public enum MessageType {
     ERROR("error"),
     HELLO("hello"),
     AUTH("auth"),
-    AUTH_OK("auth_ok");
+    AUTH_OK("auth_ok"),
+    FILE_CREATED("file_created"),
+    FILE_MODIFIED("file_modified"),
+    FILE_DELETED("file_deleted");
 
     private final String wireName;
 
