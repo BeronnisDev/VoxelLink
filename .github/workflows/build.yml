@@ -1,6 +1,14 @@
+# Publishes to CurseForge when a version tag is pushed (e.g. v1.0.0).
+# Required: secrets.CF_API_TOKEN, vars.CF_PROJECT_ID (numeric project id from CurseForge sidebar).
 name: Build
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - v*
+  pull_request:
 
 jobs:
   build:
@@ -21,10 +29,42 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      # This is needed to be able to run ./gradlew below
-      # You can run `git update-index --chmod +x gradlew` then remove this step.
       - name: Make Gradle wrapper executable
         run: chmod +x ./gradlew
 
+      - name: Read mod version
+        id: mod_version
+        run: echo "value=$(grep '^mod_version=' gradle.properties | cut -d= -f2)" >> "$GITHUB_OUTPUT"
+
       - name: Build with Gradle
         run: ./gradlew build
+
+      - name: Generate changelog
+        if: startsWith(github.ref, 'refs/tags/v')
+        id: changelog
+        run: |
+          prev=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || true)
+          if [ -n "$prev" ]; then
+            log=$(git log --pretty=format:"- %s (%h)" "$prev..HEAD")
+          else
+            log=$(git log --pretty=format:"- %s (%h)" -20)
+          fi
+          {
+            echo "value<<EOF"
+            echo "$log"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Upload to CurseForge
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: itsmeow/curseforge-upload@v3
+        with:
+          token: ${{ secrets.CF_API_TOKEN }}
+          project_id: ${{ vars.CF_PROJECT_ID }}
+          game_endpoint: minecraft
+          file_path: build/libs/cceditorbridge-${{ steps.mod_version.outputs.value }}.jar
+          game_versions: Minecraft 1.21:1.21.1,Java 21,NeoForge
+          relations: cc-tweaked:requiredDependency
+          changelog: ${{ steps.changelog.outputs.value }}
+          changelog_type: markdown
+          release_type: release
