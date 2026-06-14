@@ -67,15 +67,15 @@ From a CC terminal, run `vledit startup.lua` to request that file open in your e
 
 1. Open the pause menu and click **Mods**.
 
-![Open the Mods menu from the pause screen](screenshots/config/top_menu.png)
+![Open the Mods menu from the pause screen](https://raw.githubusercontent.com/BeronnisDev/VoxelLink/main/docs/screenshots/config/top_menu.png)
 
 2. Select **VoxelLink** in the mod list, then click **Config**.
 
-![Select VoxelLink and open its config](screenshots/config/mods_menu.png)
+![Select VoxelLink and open its config](https://raw.githubusercontent.com/BeronnisDev/VoxelLink/main/docs/screenshots/config/mods_menu.png)
 
 3. Set **Enable Editor Bridge** to **ON**. Optionally set a **WebSocket Port** (default `8765`) and **Auth Token**, then save.
 
-![VoxelLink config screen with the bridge enabled](screenshots/config/voxellink_config.png)
+![VoxelLink config screen with the bridge enabled](https://raw.githubusercontent.com/BeronnisDev/VoxelLink/main/docs/screenshots/config/voxellink_config.png)
 
 | Setting | Description |
 |---------|-------------|
