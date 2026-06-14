@@ -12,6 +12,7 @@ import com.berotech.voxellink.network.payload.FileReadRequestPayload;
 import com.berotech.voxellink.network.payload.FileReadResponsePayload;
 import com.berotech.voxellink.network.payload.FileWriteRequestPayload;
 import com.berotech.voxellink.network.payload.FileWriteResponsePayload;
+import com.berotech.voxellink.network.payload.RequestOpenEditorPayload;
 
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.client.Minecraft;
@@ -55,6 +56,10 @@ public final class ClientPacketSender {
         CompletableFuture<TargetListResponsePayload> future = PendingRequests.register(requestId, REQUEST_TIMEOUT_SECONDS);
         send(new TargetListRequestPayload(requestId));
         return future;
+    }
+
+    public static void sendOpenEditorRequest(String targetId) {
+        send(new RequestOpenEditorPayload(targetId));
     }
 
     private static void send(CustomPacketPayload payload) {

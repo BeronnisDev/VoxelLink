@@ -14,6 +14,7 @@ import com.berotech.voxellink.network.payload.FileReadResponsePayload;
 import com.berotech.voxellink.network.payload.FileWriteRequestPayload;
 import com.berotech.voxellink.network.payload.FileWriteResponsePayload;
 import com.berotech.voxellink.network.payload.OpenEditorPayload;
+import com.berotech.voxellink.network.payload.RequestOpenEditorPayload;
 import com.berotech.voxellink.network.server.ServerPacketHandler;
 
 import net.neoforged.bus.api.IEventBus;
@@ -37,6 +38,7 @@ public final class BridgeNetworking {
         registrar.playToServer(FileWriteRequestPayload.TYPE, FileWriteRequestPayload.STREAM_CODEC, ServerPacketHandler::handleFileWrite);
         registrar.playToServer(FileDeleteRequestPayload.TYPE, FileDeleteRequestPayload.STREAM_CODEC, ServerPacketHandler::handleFileDelete);
         registrar.playToServer(TargetListRequestPayload.TYPE, TargetListRequestPayload.STREAM_CODEC, ServerPacketHandler::handleTargetList);
+        registrar.playToServer(RequestOpenEditorPayload.TYPE, RequestOpenEditorPayload.STREAM_CODEC, ServerPacketHandler::handleOpenEditorRequest);
 
         registrar.playToClient(FileListResponsePayload.TYPE, FileListResponsePayload.STREAM_CODEC, ClientResponseHandler::handleFileList);
         registrar.playToClient(FileReadResponsePayload.TYPE, FileReadResponsePayload.STREAM_CODEC, ClientResponseHandler::handleFileRead);

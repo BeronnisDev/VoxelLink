@@ -17,6 +17,8 @@ import com.berotech.voxellink.network.payload.FileWriteResponsePayload;
 import com.berotech.voxellink.network.payload.TargetListEntry;
 import com.berotech.voxellink.network.payload.TargetListRequestPayload;
 import com.berotech.voxellink.network.payload.TargetListResponsePayload;
+import com.berotech.voxellink.network.payload.RequestOpenEditorPayload;
+import com.berotech.voxellink.sfm.SFMEditorOpenRequests;
 import com.berotech.voxellink.sfm.SFMPaths;
 import com.berotech.voxellink.target.ResolvedTarget;
 import com.berotech.voxellink.target.TargetId;
@@ -50,6 +52,10 @@ public final class ServerPacketHandler {
         context.enqueueWork(() -> handleTargetListWork(payload, context));
     }
 
+    public static void handleOpenEditorRequest(RequestOpenEditorPayload payload, IPayloadContext context) {
+        context.enqueueWork(() -> handleOpenEditorRequestWork(payload, context));
+    }
+
     private static void handleTargetListWork(TargetListRequestPayload payload, IPayloadContext context) {
         if (!(context.player() instanceof ServerPlayer player)) {
             context.reply(new TargetListResponsePayload(payload.requestId(), List.of(), "Target list requires a player"));
@@ -62,6 +68,17 @@ public final class ServerPacketHandler {
                 .map(target -> new TargetListEntry(target.id(), target.label(), target.backend(), target.kind()))
                 .toList();
         context.reply(new TargetListResponsePayload(payload.requestId(), targets, ""));
+    }
+
+    private static void handleOpenEditorRequestWork(RequestOpenEditorPayload payload, IPayloadContext context) {
+        if (!(context.player() instanceof ServerPlayer player)) {
+            return;
+        }
+
+        SFMEditorOpenRequests.Result result = SFMEditorOpenRequests.requestOpen(player, payload.targetId());
+        if (!result.success()) {
+            player.displayClientMessage(net.minecraft.network.chat.Component.literal(result.message()), true);
+        }
     }
 
     private static void handleFileListWork(FileListRequestPayload payload, IPayloadContext context) {

@@ -9,6 +9,10 @@ public record BridgeStatus(
         int authenticatedConnections,
         boolean preferLabelIds
 ) {
+    public boolean isEditorLinked() {
+        return enabled && running && authenticatedConnections > 0;
+    }
+
     public String format() {
         return "enabled=" + enabled
                 + ", running=" + running

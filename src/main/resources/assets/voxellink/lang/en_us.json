@@ -5,5 +5,7 @@
   "voxellink.configuration.enabled": "Enable Editor Bridge",
   "voxellink.configuration.socketPort": "WebSocket Port",
   "voxellink.configuration.authToken": "Auth Token",
-  "voxellink.configuration.skipAuthForDev": "Skip Auth For Dev"
+  "voxellink.configuration.skipAuthForDev": "Skip Auth For Dev",
+  "voxellink.sfm.open_in_editor": "Open in Editor",
+  "voxellink.sfm.open_in_editor.tooltip": "Open program.sfml in your connected external editor. The status dot is green when an editor is linked."
 }
