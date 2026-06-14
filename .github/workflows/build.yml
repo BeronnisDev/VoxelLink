@@ -64,7 +64,10 @@ jobs:
           game_endpoint: minecraft
           file_path: build/libs/voxellink-${{ steps.mod_version.outputs.value }}.jar
           game_versions: Minecraft 1.21:1.21.1,Java 21,NeoForge
-          relations: cc-tweaked:requiredDependency
+          relations: >
+            cc-tweaked:optionalDependency,
+            super-factory-manager:optionalDependency
+
           changelog: ${{ steps.changelog.outputs.value }}
           changelog_type: markdown
           release_type: release
