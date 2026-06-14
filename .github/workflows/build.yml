@@ -23,8 +23,8 @@ jobs:
       - name: Setup JDK 21
         uses: actions/setup-java@v4
         with:
-          java-version: '21'
-          distribution: 'temurin'
+          java-version: "21"
+          distribution: "temurin"
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
@@ -62,7 +62,7 @@ jobs:
           token: ${{ secrets.CF_API_TOKEN }}
           project_id: ${{ vars.CF_PROJECT_ID }}
           game_endpoint: minecraft
-          file_path: build/libs/cceditorbridge-${{ steps.mod_version.outputs.value }}.jar
+          file_path: build/libs/voxellink-${{ steps.mod_version.outputs.value }}.jar
           game_versions: Minecraft 1.21:1.21.1,Java 21,NeoForge
           relations: cc-tweaked:requiredDependency
           changelog: ${{ steps.changelog.outputs.value }}
