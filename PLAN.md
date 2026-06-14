@@ -1,4 +1,4 @@
-# CC Editor Bridge - Development Plan
+# VoxelLink - Development Plan
 
 ## Overview
 Build a Minecraft 1.21.1 NeoForge mod that bridges external editors with CC: Tweaked computers via a client-side WebSocket server. Architecture: `editor <-> client <-> server`.
@@ -21,8 +21,8 @@ Build a Minecraft 1.21.1 NeoForge mod that bridges external editors with CC: Twe
 ### Task 1.2: Create Basic Mod Entry Points
 - **Goal**: Mod loads in Minecraft without crashing
 - **Steps**:
-  - [x] Create `CCEditorBridge` main mod class with `@Mod` annotation
-  - [x] Create `CCEditorBridgeClient` that prints to log on client startup
+  - [x] Create `VoxelLink` main mod class with `@Mod` annotation
+  - [x] Create `VoxelLinkClient` that prints to log on client startup
   - [x] Handle server startup logging in main class (`onServerStarting`)
   - [x] ~~Add `META-INF/services` files for mod loading~~ (not required for NeoForge `@Mod`)
   - [x] Add basic `mods.toml` with name, version, description
@@ -55,7 +55,7 @@ Build a Minecraft 1.21.1 NeoForge mod that bridges external editors with CC: Twe
 - **Goal**: A basic WebSocket server starts on the client
 - **Steps**:
   - [x] Create `EditorSocketServer` class
-  - [x] Implement server startup in `CCEditorBridgeClient` client setup
+  - [x] Implement server startup in `VoxelLinkClient` client setup
   - [x] Bind to `localhost:<configPort>`
   - [x] Add basic connection handler (log connections/disconnections)
   - [x] Add graceful shutdown on client disconnect
@@ -187,9 +187,9 @@ Build a Minecraft 1.21.1 NeoForge mod that bridges external editors with CC: Twe
 ### Task 5.3: Add Debug Commands
 - **Goal**: Easy in-game testing and debugging
 - **Steps**:
-  - [x] Add `/cceditor status` - show socket server status
-  - [x] Add `/cceditor test` - run self-test of server connection
-  - [x] Add `/cceditor list <computer>` - list files on computer
+  - [x] Add `/voxellink status` - show socket server status
+  - [x] Add `/voxellink test` - run self-test of server connection
+  - [x] Add `/voxellink list <computer>` - list files on computer
   - [x] Add in-game config reload command
 - **Test**: Run commands in single-player world — [ ]
 - **Acceptance**: All commands work and show useful output — [ ]

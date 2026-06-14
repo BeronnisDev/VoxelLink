@@ -31,6 +31,11 @@ repositories {
         url = 'https://maven.squiddev.cc'
         content { includeGroup('cc.tweaked') }
     }
+    maven {
+        name = 'Modrinth'
+        url = 'https://api.modrinth.com/maven'
+        content { includeGroup('maven.modrinth') }
+    }
 }
 
 base {
@@ -127,6 +132,9 @@ dependencies {
     compileOnly "cc.tweaked:cc-tweaked-${minecraft_version}-core-api:${cct_version}"
     compileOnly "cc.tweaked:cc-tweaked-${minecraft_version}-forge-api:${cct_version}"
     localRuntime "cc.tweaked:cc-tweaked-${minecraft_version}-forge:${cct_version}"
+
+    // Super Factory Manager — dev runs only (integration uses reflection, not compile-time API)
+    localRuntime "maven.modrinth:super-factory-manager:${sfm_modrinth_version}"
 
     // WebSocket server for editor bridge (bundled via jarJar for release)
     jarJar(implementation("org.java-websocket:Java-WebSocket:${websocket_version}")) {

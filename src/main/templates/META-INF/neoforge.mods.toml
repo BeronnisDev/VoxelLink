@@ -46,7 +46,8 @@ authors="Beronnis"
 
 # The description text for the mod (multi line!) (#mandatory)
 description='''
-Integrates with CC: Tweaked to allow external editors to edit files via a client-side socket bridge.
+Connect external editors to in-game scripting targets via a client-side WebSocket bridge.
+Supports CC: Tweaked computers and Super Factory Manager programs when those mods are installed.
 '''
 
 # The [[mixins]] block allows you to declare your mixin config to FML so that it gets loaded.
@@ -90,8 +91,14 @@ Integrates with CC: Tweaked to allow external editors to edit files via a client
 
 [[dependencies.${mod_id}]]
     modId="computercraft"
-    type="required"
+    type="optional"
     versionRange="${cct_version_range}"
+    ordering="AFTER"
+    side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="sfm"
+    type="optional"
     ordering="AFTER"
     side="BOTH"
 

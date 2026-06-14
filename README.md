@@ -1,24 +1,26 @@
-# CC Editor Bridge
+# VoxelLink
 
-A Minecraft 1.21.1 NeoForge mod that bridges external code editors to CC: Tweaked computers via a client-side WebSocket server.
+A Minecraft 1.21.1 NeoForge mod that connects external code editors to in-game scripting targets via a client-side WebSocket bridge.
 
 ```
-editor <-> client (WebSocket) <-> server (packets) <-> CC computer filesystem
+editor <-> client (WebSocket) <-> server (packets) <-> script backends (CC, SFM, ...)
 ```
 
 ## Features
 
 - Localhost WebSocket server for editor connections
 - Token authentication
-- File list / read / write / delete against CC computer HDD storage
+- Pluggable backends for **CC: Tweaked** (multi-file computers) and **Super Factory Manager** (manager disk programs)
+- File list / read / write / delete (backend-specific capabilities apply)
 - Real-time file change events pushed to editors
-- Computer identification by position (`pos:`) or CC label (`label:`)
-- In-game `ccedit` shell command to open files in a connected editor
+- Target discovery with namespaced ids (`cc:`, `sfm:`)
+- In-game `vledit` shell command on CC computers to open files in a connected editor
 
 ## Quick start
 
-1. Install the mod with [CC: Tweaked](https://tweaked.cc/) and NeoForge 1.21.1
-2. Enable the bridge in `config/cceditorbridge-client.toml`:
+1. Install VoxelLink with NeoForge 1.21.1
+2. Optionally install [CC: Tweaked](https://tweaked.cc/) and/or [Super Factory Manager](https://github.com/TeamDman/SuperFactoryManager)
+3. Enable the bridge in `config/voxellink-client.toml`:
 
 ```toml
 enabled = true
@@ -28,24 +30,40 @@ preferLabelIds = true
 maxOperationsPerMinute = 120
 ```
 
-3. In-game, look at a CC computer and run `/cceditor id` to get its computer id
-4. Connect your editor to `ws://127.0.0.1:8765/`
+4. In-game, look at a CC computer or SFM manager with a disk inserted and run `/voxellink id`
+5. Connect your editor to `ws://127.0.0.1:8765/`
+
+## Target ids
+
+| Backend | Example id | Notes |
+|---------|------------|-------|
+| CC (position) | `cc:pos:minecraft:overworld:10:64:-5` | Multi-file filesystem |
+| CC (label) | `cc:label:my-controller` | Requires `os.setComputerLabel` |
+| SFM (manager) | `sfm:pos:minecraft:overworld:12:64:-3` | Single virtual file `program.sfml` |
 
 ## Documentation
 
 - [Editor protocol spec](docs/EDITOR_PROTOCOL.md)
 - [Example Python client](examples/editor_client.py)
-- [Development plan](PLAN.md)
 
 ## Debug commands
 
 | Command | Description |
 |---------|-------------|
-| `/cceditor status` | Bridge status and connection info |
-| `/cceditor test` | Self-test WebSocket and packet path |
-| `/cceditor reload` | Reload client config from disk |
-| `/cceditor id` | Show ids for the computer you're looking at |
-| `/cceditor list [computer]` | List files on a computer |
+| `/voxellink status` | Bridge status and connection info |
+| `/voxellink test` | Self-test WebSocket and packet path |
+| `/voxellink reload` | Reload client config from disk |
+| `/voxellink id` | Show ids for the block you're looking at |
+| `/voxellink list [target]` | List files on a target |
+
+## CC shell
+
+On CC computers with VoxelLink installed:
+
+```
+vledit startup.lua
+vledit programs/miner.lua
+```
 
 ## Development
 
@@ -53,22 +71,17 @@ maxOperationsPerMinute = 120
 ./gradlew runClient
 ```
 
-Requires Java 21.
+Requires Java 21. CC: Tweaked and Super Factory Manager are included in dev runs via `localRuntime`.
 
 ### Multiplayer / dedicated server testing
 
-NeoForge includes a dedicated server run config. Use two terminals:
-
-**Terminal 1 — dedicated server**
 ```powershell
-./gradlew runServer
+./gradlew runServer   # terminal 1
+./gradlew runClient   # terminal 2
 ```
 
-**Terminal 2 — client**
-```powershell
-./gradlew runClient
-```
+The dedicated server uses `run-server/` as its game directory.
 
-Connect the client to `localhost` (default port `25565`). The server uses `run-server/` so it can run at the same time as the client (`run/`).
+## License
 
-CC: Tweaked is included automatically in both runs via `localRuntime`. Each connected player gets their own localhost WebSocket bridge on their client.
+MIT — see [LICENSE.md](LICENSE.md).

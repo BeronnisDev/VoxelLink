@@ -1,0 +1,9 @@
+{
+  "voxellink.configuration.title": "VoxelLink Configs",
+  "voxellink.configuration.section.voxellink.client.toml": "Editor Bridge",
+  "voxellink.configuration.section.voxellink.client.toml.title": "Editor Bridge",
+  "voxellink.configuration.enabled": "Enable Editor Bridge",
+  "voxellink.configuration.socketPort": "WebSocket Port",
+  "voxellink.configuration.authToken": "Auth Token",
+  "voxellink.configuration.skipAuthForDev": "Skip Auth For Dev"
+}

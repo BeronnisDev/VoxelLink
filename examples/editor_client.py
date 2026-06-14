@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Minimal CC Editor Bridge client example.
+"""Minimal VoxelLink client example.
 
 Requires: pip install websockets
 
 Usage:
-    python editor_client.py --port 8765 --token your-token --computer label:my-controller
+    python editor_client.py --port 8765 --token your-token --target cc:label:my-controller
 """
 
 from __future__ import annotations
@@ -34,7 +34,7 @@ async def expect_type(ws, message_type: str) -> dict[str, Any]:
     return message
 
 
-async def run(host: str, port: int, token: str | None, computer_id: str, path: str) -> None:
+async def run(host: str, port: int, token: str | None, target_id: str, path: str) -> None:
     import websockets
 
     uri = f"ws://{host}:{port}/"
@@ -50,7 +50,7 @@ async def run(host: str, port: int, token: str | None, computer_id: str, path: s
         await send_json(ws, {"type": "ping"})
         await expect_type(ws, "pong")
 
-        await send_json(ws, {"type": "file_list", "computerId": computer_id, "path": path})
+        await send_json(ws, {"type": "file_list", "targetId": target_id, "path": path})
         listing = await recv_json(ws)
         if listing.get("type") == "error":
             raise RuntimeError(listing.get("message", "file_list failed"))
@@ -65,7 +65,7 @@ async def run(host: str, port: int, token: str | None, computer_id: str, path: s
             print(f"Skipping directory entry: {first_file}")
             return
 
-        await send_json(ws, {"type": "file_read", "computerId": computer_id, "path": first_file})
+        await send_json(ws, {"type": "file_read", "targetId": target_id, "path": first_file})
         content = await recv_json(ws)
         if content.get("type") == "error":
             raise RuntimeError(content.get("message", "file_read failed"))
@@ -75,15 +75,15 @@ async def run(host: str, port: int, token: str | None, computer_id: str, path: s
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="CC Editor Bridge example client")
+    parser = argparse.ArgumentParser(description="VoxelLink example client")
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=8765)
     parser.add_argument("--token", default=None, help="Auth token if configured")
-    parser.add_argument("--computer", required=True, help="e.g. label:my-controller or pos:minecraft:overworld:0:64:0")
-    parser.add_argument("--path", default="/", help="Directory to list")
+    parser.add_argument("--target", required=True, help="e.g. cc:label:my-controller or sfm:pos:minecraft:overworld:0:64:0")
+    parser.add_argument("--path", default="/", help="Directory to list (CC) or ignored for SFM")
     args = parser.parse_args()
 
-    asyncio.run(run(args.host, args.port, args.token, args.computer, args.path))
+    asyncio.run(run(args.host, args.port, args.token, args.target, args.path))
 
 
 if __name__ == "__main__":
