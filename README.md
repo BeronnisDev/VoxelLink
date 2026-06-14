@@ -18,20 +18,7 @@ editor <-> client (WebSocket) <-> server (packets) <-> script backends (CC, SFM,
 
 ## Quick start
 
-1. Install VoxelLink with NeoForge 1.21.1
-2. Optionally install [CC: Tweaked](https://tweaked.cc/) and/or [Super Factory Manager](https://github.com/TeamDman/SuperFactoryManager)
-3. Enable the bridge in `config/voxellink-client.toml`:
-
-```toml
-enabled = true
-socketPort = 8765
-authToken = "your-secret-token"
-preferLabelIds = true
-maxOperationsPerMinute = 120
-```
-
-4. In-game, look at a CC computer or SFM manager with a disk inserted and run `/voxellink id`
-5. Connect your editor to `ws://127.0.0.1:8765/`
+See [Getting Started](docs/MOD.md#getting-started) for install steps, enabling the bridge, and connecting your editor.
 
 ## Target ids
 
@@ -43,6 +30,7 @@ maxOperationsPerMinute = 120
 
 ## Documentation
 
+- [Mod page / getting started](docs/MOD.md#getting-started)
 - [Editor protocol spec](docs/EDITOR_PROTOCOL.md)
 - [Example Python client](examples/editor_client.py)
 
